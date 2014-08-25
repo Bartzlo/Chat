@@ -10,7 +10,7 @@ import static server.ServerChat.*;
 public class User {
     public String userName;
     public Socket userSoc;
-    boolean user = false;
+    boolean user = true;
 
     User (ServerSocket ss){
         try {userSoc = ss.accept(); }catch (Exception x){}
