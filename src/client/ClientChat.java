@@ -10,7 +10,7 @@ public class ClientChat {
     public static void main(String[] args) {
 
         try{
-            Socket soc = new Socket("127.0.0.1", 1234);
+            Socket soc = new Socket("127.0.0.1", 6666);
             DataOutputStream out = new DataOutputStream(soc.getOutputStream());
             DataInputStream in = new DataInputStream(soc.getInputStream());
             System.out.println("Client is ready");

@@ -10,7 +10,7 @@ public class Connect implements Runnable{
     public void run(){
         try {
 
-            ServerSocket ss = new ServerSocket(1234);
+            ServerSocket ss = new ServerSocket(6666);
             System.out.println("Server is ready");
 
             while (true){
