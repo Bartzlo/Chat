@@ -8,17 +8,33 @@ import static server.ServerChat.*;
  * Created by Bart on 25.08.2014.
  */
 public class User {
-    public String userName;
-    public Socket userSoc;
-    boolean user = true;
+    private String name;
+    //public Socket userSoc;
+    private boolean isUserCreated = true;
 
-    User (ServerSocket ss){
-        try {userSoc = ss.accept(); }catch (Exception x){}
-        userName = "User number "+ (socList.size()+1);
+    public User(){
     }
 
+    public User(String name){
+        name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //    User (ServerSocket ss){
+//        try {userSoc = ss.accept(); }
+//        catch (Exception x){}
+//        userName = "User number "+ (socList.size()+1);
+//    }
+
     public boolean checkUser(){
-        return user;
+        return isUserCreated;
     }
 
 
