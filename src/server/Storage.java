@@ -1,6 +1,9 @@
 package server;
 
+import java.net.Socket;
+import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -32,4 +35,31 @@ public class Storage {
 
         //у неавторизованных пользователей имя будет "Гость345"  - я так предлагаю. Без имени использовать HashMap не выйдет
     }
+
+    public User SerachUser(Socket soc){
+        return new User();
+    }
+
+    public User SerachUser(String name){
+        return new User();
+    }
+
+    public String SerachUserName(Socket soc){
+        return new String();
+    }
+
+    public Socket SerachUserSocket(String name){
+        return new Socket();
+    }
+
+    public int getNumberUsers (){    // Количество пользователей
+        int n=5;
+        return n;
+    }
+
+    public Iterator getIterator (){
+        Iterator it = userAndCon.entrySet().iterator();
+        return it;
+    }
+
 }

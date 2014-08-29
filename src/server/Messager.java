@@ -1,24 +1,29 @@
 package server;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
+import java.util.Iterator;
+
 import static server.ServerChat.*;
 
 // Отправка сообщений клиентам
 public class Messager{
 
-    static DataOutputStream outMes;
+   static void sendMessageAll (Message message){
+       Iterator it = storage.getIterator();
+       while (it.hasNext()){
+           // Код для отправки сообщений всем
+       }
+   }
 
-    public static void sendMessage(int numClient, String message){
-       if (socList.size() < 2) return;
-        try{
-            for (int i=0; i < socList.size(); i++){
-                if (i == numClient) continue; //если это отправитель, ему не посылаем это сообщение
-                outMes = new DataOutputStream(socList.get(i).userSoc.getOutputStream());
-                outMes.writeUTF(message);
-            }
-        }
-        catch(Exception x){
-            x.printStackTrace();
-        }
-    }
+   static Message readMessage (Socket soc) throws IOException, ClassNotFoundException {
+           ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
+           Message message = (Message) inpMes.readObject();
+           return message;
+   }
+
+
 }

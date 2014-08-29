@@ -1,31 +1,36 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.IOException;
+import javafx.util.Pair;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import static server.ServerChat.*;
+import java.util.Iterator;
+
+import static server.ServerChat.socList;
+import static server.ServerChat.storage;
 
 // Принимаем сообщения
 public class Router implements Runnable{
 
-    DataInputStream inpMes;
-    String message;
-
     public void run(){
         while (true) {
             // Если нет подключений к серверу, ждем 1 секунду
-            if (socList.size() < 1){
+            if (storage.getNumberUsers() < 1){
                 try{
                     Thread.sleep(1000);
                 }catch(InterruptedException x){}
             }
 
-            for (int i=0; i< socList.size(); i++){
+            // Получаем итератор
+            Iterator it = storage.getIterator();
+
+            while (it.hasNext()){
                 try{
-                    inpMes = new DataInputStream(socList.get(i).userSoc.getInputStream());
-                    message = socList.get(i).userName+": " + inpMes.readUTF();
-                    Messager.sendMessage(i, message);
+                    Pair <User, UserConnect> userAndCon =it.next() <User, UserConnect>;
+                    if (!userAndCon.getKey().checkUser()) continue; // если юзер не создан продолжаем
+                    Socket soc = userAndCon.getValue().getUserSoc();
+                    Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
+                    new Thread(new DecodeReader(mes)).start(); // Запускаем поток обработки сообщений
                 }
                 //Если нет сообщения в течении 1 мс идем дальше
                 catch(SocketTimeoutException x){
@@ -35,11 +40,10 @@ public class Router implements Runnable{
                 //Удаляем этого пользователя из списа socList
                 catch(SocketException x){
                     if (x.getMessage().equals("Connection reset")){
-                        System.out.println("Disconnect user: "+ socList.get(i).toString());
-                        socList.remove(i);
+                        // Сдесь нужно удалить отметить что пользователь отключился
                     }
                 }
-                catch(IOException x){
+                catch(Exception x){
                     x.printStackTrace();
                 }
             }
