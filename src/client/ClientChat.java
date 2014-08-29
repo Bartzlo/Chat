@@ -11,8 +11,8 @@ public class ClientChat {
 
         try{
             Socket soc = new Socket("127.0.0.1", 6666);
-            DataOutputStream out = new DataOutputStream(soc.getOutputStream());
-            DataInputStream in = new DataInputStream(soc.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
             System.out.println("Client is ready");
 
             // Запускаем поток для приема сообщений

@@ -1,6 +1,9 @@
 package client;
 
+import server.Message;
+
 import java.io.DataOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 /**
@@ -9,19 +12,18 @@ import java.util.Scanner;
 public class OutMessage extends Thread {
 
     Scanner UserMesSc = new Scanner(System.in);
+    Message message;
+    ObjectOutputStream outStream;
 
-    String message;
-    DataOutputStream outStream;
-
-    OutMessage(DataOutputStream out){
+    public OutMessage(ObjectOutputStream out){
         outStream = out;
     }
 
     public void run(){
         try{
             while (true) {
-                message = UserMesSc.nextLine();
-                outStream.writeUTF(message);
+                message = new Message(null, UserMesSc.nextLine(), null);
+                outStream.writeObject(message);
                 outStream.flush();
             }
         }
