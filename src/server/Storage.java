@@ -63,6 +63,7 @@ public class Storage {
 
     public void addConnection (User user, UserConnect userConnect){
         userAndCon.put(user, userConnect);
+
     }
 
     public void delConnection (User user){

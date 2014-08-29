@@ -1,5 +1,7 @@
 package server;
 
+import common.Message;
+
 /**
  * Created by Bart on 29.08.2014.
  */

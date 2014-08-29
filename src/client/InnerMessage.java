@@ -1,6 +1,8 @@
 package client;
 
-import server.Message;
+import common.Message;
+import common.PrintOut;
+
 import java.io.ObjectInputStream;
 
 /**
@@ -18,10 +20,7 @@ public class InnerMessage implements Runnable{
         try{
             while (true){
                 Message message = (Message) inStream.readObject();
-                String date = message.getDate().toString();
-                String mesStr = message.getMessage();
-                String name = message.getUserName();
-                System.out.println(date + " | " + name + ": " + mesStr);
+                PrintOut.printMessasge(message);
             }
         }
         catch(Exception x){

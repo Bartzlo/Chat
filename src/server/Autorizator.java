@@ -1,5 +1,6 @@
 package server;
 
+import common.Message;
 import java.net.Socket;
 import java.net.SocketException;
 import static server.ServerChat.storage;

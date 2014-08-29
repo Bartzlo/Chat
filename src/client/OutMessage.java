@@ -1,8 +1,7 @@
 package client;
 
-import server.Message;
+import common.Message;
 
-import java.io.DataOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
