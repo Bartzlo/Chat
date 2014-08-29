@@ -9,6 +9,11 @@ public class UserConnect {
     private User user;
     private Socket userSoc;
 
+    public UserConnect(User user, Socket userSoc) {
+        this.user = user;
+        this.userSoc = userSoc;
+    }
+
     public User getUser() {
         return user;
     }

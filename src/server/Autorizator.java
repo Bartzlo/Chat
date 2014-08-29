@@ -1,12 +1,8 @@
 package server;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Date;
+import static server.ServerChat.storage;
 
 /**
  * Created by Bart on 29.08.2014.
@@ -22,7 +18,15 @@ public class Autorizator implements Runnable {
     }
 
     public void run(){
-        Message mesLogin = new Message("Server", "Please enter your login", new Date());
+
+        User unResistUser = new User("Urer " + storage.getNumberUsersConnect()+1);
+        UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
+        storage.addConnection(unResistUser, unResistUserCon);
+
+
+        // Пока же без регистрации
+
+        /*Message mesLogin = new Message("Server", "Please enter your login", new Date());
         Message mesPass = new Message("Server", "Please enter your password", new Date());
         try {
             Messager.sendPrivatMessage(mesLogin, soc);
@@ -35,7 +39,7 @@ public class Autorizator implements Runnable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        */
     }
 
 }
