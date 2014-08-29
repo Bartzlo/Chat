@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -58,7 +59,7 @@ public class Storage {
     }
 
     public Iterator getIterator (){
-        Iterator it = userAndCon.entrySet().iterator();
+        Iterator<Map.Entry<User, UserConnect>> it = userAndCon.entrySet().iterator();
         return it;
     }
 
