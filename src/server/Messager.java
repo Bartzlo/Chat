@@ -2,17 +2,29 @@ package server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Date;
 import java.util.Iterator;
-
-import static server.ServerChat.*;
+import java.util.Map;
+import static server.ServerChat.storage;
 
 // Отправка сообщений клиентам
 public class Messager{
 
    static void sendMessageAll (Message message){
-       Iterator it = storage.getIterator();
+       Iterator <Map.Entry<User, UserConnect>> it = storage.getIterator();
        while (it.hasNext()){
-           // Код для отправки сообщений всем
+           try {
+               Map.Entry<User, UserConnect> userAndCon = it.next();
+               Socket soc = userAndCon.getValue().getUserSoc();
+               User user = userAndCon.getValue().getUser();
+               ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
+               outMes.writeObject(message);
+           } catch (IOException x){
+               if (x.getMessage().equals("Connection reset")){
+                   System.out.println("Disconnect" + user.getName() + new Date().toString());
+                   storage.delConnection(user);
+               }
+           }
        }
    }
 

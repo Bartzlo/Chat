@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -30,23 +31,15 @@ public class Router implements Runnable{
                     User user = userAndCon.getKey();
                     Socket soc = userAndCon.getValue().getUserSoc();
                     Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
-
                     new Thread(new DecodeReader(mes)).start(); // Запускаем поток обработки сообщений
                 }
                 //Если нет сообщения в течении 1 мс идем дальше
                 catch(SocketTimeoutException x){
                     continue;
-                }
-                //Если потерянно соединение, выводим сообщение на сервер и
-                //Удаляем этого пользователя из списа storage
-                catch(SocketException x){
-                    if (x.getMessage().equals("Connection reset")){
-                        System.out.println("Disconnect" + user.getName() + new Date().toString());
-                        storage.delConnection(user);
-                }
-                }
-                catch(Exception x){
-                    x.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
