@@ -10,7 +10,7 @@ public class Message {
     private String message;
     private Date date;
 
-    public void Message (String userName, String message, Date date){
+    public Message (String userName, String message, Date date){
         this.userName = userName;
         this.message = message;
         this.date = date;

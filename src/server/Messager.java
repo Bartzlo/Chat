@@ -1,9 +1,6 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Iterator;
 
@@ -19,10 +16,15 @@ public class Messager{
        }
    }
 
+   static void sendPrivatMessage (Message mes, Socket soc) throws IOException {
+       ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
+       outMes.writeObject(mes);
+   }
+
    static Message readMessage (Socket soc) throws IOException, ClassNotFoundException {
            ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
-           Message message = (Message) inpMes.readObject();
-           return message;
+           Message mes = (Message) inpMes.readObject();
+           return mes;
    }
 
 

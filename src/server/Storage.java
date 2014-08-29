@@ -53,7 +53,7 @@ public class Storage {
         return new Socket();
     }
 
-    public int getNumberUsers (){    // Количество пользователей
+    public int getNumberUsersConnect (){    // Количество подключений
         int n=5;
         return n;
     }
