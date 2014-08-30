@@ -48,48 +48,99 @@ public class Storage {
         return instance;
     }
 
-    public static ConcurrentHashMap<User, UserConnect> userAndCon = new ConcurrentHashMap<User, UserConnect>();
+    private static ConcurrentHashMap<User, UserConnect> userAndCon = new ConcurrentHashMap<User, UserConnect>();
     // Concurrent - безопасный для использования нескольких потоков
+
+    private static ConcurrentHashMap<User, Integer> Users = new ConcurrentHashMap<User, Integer>();
+
 
     private static void fillUserInfo(){
         //по идее тут должно быть считывание с файла, но пока путь будет так
-        userAndCon.put(new User("IlyaOzy"),null); //у неподключенных пользователей второе значение будет null
-        userAndCon.put(new User("BartZlo"),null); //у неподключенных пользователей второе значение будет null
-        userAndCon.put(new User("Evgenia"),null); //у неподключенных пользователей второе значение будет null
-        userAndCon.put(new User("Admin"),null); //у неподключенных пользователей второе значение будет null
+        Users.put(new User("IlyaOzy"),null); //у неподключенных пользователей второе значение будет null
+        Users.put(new User("BartZlo"),null); //у неподключенных пользователей второе значение будет null
+        Users.put(new User("Evgenia"),null); //у неподключенных пользователей второе значение будет null
+        Users.put(new User("Admin"),null); //у неподключенных пользователей второе значение будет null
 
         //у неавторизованных пользователей имя будет "Гость345"  - я так предлагаю. Без имени использовать HashMap не выйдет
     }
 
-    public void addConnection (User user, UserConnect userConnect){
-        userAndCon.put(user, userConnect);
+    public int LogInUser(User user, String name, String pass){ //пароль пока не используем
+        for (Map.Entry<User, Integer> ob1 : Users.entrySet()) {
+            if (ob1.getKey().getName().equals(name)){
+                user = ob1.getKey();
+                return 0;
+            }
+        }
+        return -1;
+    }
 
+    public int RegistrationUser(User user, String name, String pass){ //пароль пока не используем
+        for (Map.Entry<User, Integer> ob1 : Users.entrySet()) {
+            if (ob1.getKey().getName().equals(name)){
+                return -1;
+            }
+        }
+        Users.put(user, null);
+        return 0;
+    }
+
+    public void addConnection (User user, UserConnect userConnect){
+
+        boolean isThere = false;
+        for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getKey().equals(user)){
+                isThere = true;
+            }
+        }
+
+        if (!isThere){
+            userAndCon.put(user, userConnect);
+        }
     }
 
     public void delConnection (User user){
         userAndCon.remove(user);
+
     }
 
     public User GetUser(Socket soc){
-        return new User();
+        for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getValue().getUserSoc().equals(soc)){
+                return ob1.getKey();
+            }
+        }
+        return null;
     }
 
     public User GetUser(String name){
-        return new User();
+        //return new User();
+        for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getKey().getName().equals(name)){
+                return ob1.getKey();
+            }
+        }
+        return null;
     }
 
-    public String GetUserName(Socket soc){
-        return new String();
+//    public String GetUserName(Socket soc){
+//        return new String();
+//    }
+
+    public UserConnect GetUserConnect(String name){
+        //return new Socket();
+        for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getKey().getName().equals(name)){
+                return ob1.getValue();
+            }
+
+        }
+        return null;
     }
 
-    public Socket GetUserSocket(String name){
-        return new Socket();
-    }
-
-    public int getNumberUsersConnect (){    // Количество подключений
-        int n=5;
-        return n;
-    }
+//    public int getNumberUsersConnect (){    // Количество подключений
+//        int n=5;
+//        return n;
+//    }
 
     public Iterator getIterator (){
         Iterator<Map.Entry<User, UserConnect>> it = userAndCon.entrySet().iterator();

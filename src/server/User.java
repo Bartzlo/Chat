@@ -9,7 +9,7 @@ import static server.ServerChat.*;
  */
 public class User {
     private String name;
-    private boolean isUserCreated = true;
+    private boolean isUserLogIn = true;
 
     public User(){}
 
@@ -26,7 +26,7 @@ public class User {
     }
 
     public boolean checkUser(){
-        return isUserCreated;
+        return isUserLogIn;
     }
 
 
