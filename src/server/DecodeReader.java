@@ -16,7 +16,7 @@ public class DecodeReader implements Runnable {
     public void run() {
         // Сдесь будет определятся тип сообщения, команда или просто сообщение
         // Пока в любом случае отправляем всем
-        PrintOut.printMessasge(message);
+        PrintOut.printMessage(message);
         Messager.sendMessageAll(message);
     }
 }

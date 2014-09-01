@@ -5,12 +5,14 @@ import common.PrintOut;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 25.08.2014.
  */
 public class InnerMessage implements Runnable{
 
+    public ArrayList<Message> ClientLog = new ArrayList<Message>();
     Socket soc;
 
     public InnerMessage(Socket soc){
@@ -22,7 +24,8 @@ public class InnerMessage implements Runnable{
             while (true){
                 ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
                 Message message = (Message) in.readObject();
-                PrintOut.printMessasge(message);
+                ClientLog.add(message);
+                PrintOut.printMessageClient(ClientLog);
             }
         }
         catch(Exception x){
