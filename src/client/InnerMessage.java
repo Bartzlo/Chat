@@ -40,6 +40,4 @@ public class InnerMessage implements Runnable{
             }
         }
     }
-
-
 }
