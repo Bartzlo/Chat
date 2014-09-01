@@ -3,12 +3,15 @@ package server;
 import common.Message;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Random;
+
 import static server.ServerChat.storage;
 
 /**
  * Created by Bart on 29.08.2014.
  */
 public class Autorizator implements Runnable {
+    Random rn = new Random();
     private Socket soc;
     private Boolean isUserCreate = false;
     private Message logi, pass;
@@ -20,7 +23,7 @@ public class Autorizator implements Runnable {
 
     public void run(){
 
-        User unResistUser = new User("Urer_" + (storage.getNumberUsersConnect()+1));
+        User unResistUser = new User("Guest_" + rn.nextInt());
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
         storage.addConnection(unResistUser, unResistUserCon);
 
