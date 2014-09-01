@@ -1,8 +1,10 @@
 package client;
 
+import common.InOutMessage;
 import common.Message;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -12,7 +14,7 @@ import java.util.Scanner;
  */
 public class OutMessage extends Thread {
 
-    Scanner UserMesSc = new Scanner(System.in);
+    Scanner userMesSc = new Scanner(System.in);
     Message message;
     Socket soc;
 
@@ -21,16 +23,17 @@ public class OutMessage extends Thread {
     }
 
     public void run(){
-        try{
-            while (true) {
-                message = new Message(null, UserMesSc.nextLine(), null);
-                ObjectOutputStream outStream = new ObjectOutputStream(soc.getOutputStream());
-                outStream.writeObject(message);
-                outStream.flush();
+        while (true){
+            message = new Message(null, userMesSc.nextLine(), null);
+            try {
+                InOutMessage.sendMessage(soc, message);
             }
-        }
-        catch(Exception x){
-            x.printStackTrace();
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

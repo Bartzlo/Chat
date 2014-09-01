@@ -1,12 +1,11 @@
 package server;
 
+import common.InOutMessage;
 import common.Message;
-import common.PrintOut;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import static server.ServerChat.storage;
@@ -21,13 +20,15 @@ public class Messager{
            Socket soc = userAndCon.getValue().getUserSoc();
            User user = userAndCon.getValue().getUser();
            try {
-               ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
-               outMes.writeObject(message);
-               outMes.flush();
-           } catch (IOException x){
+               InOutMessage.sendMessage(soc, message);
+           }
+           catch (IOException x){
                if (x.getMessage().equals("Connection reset")){
                    storage.delConnection(user);
                } else x.printStackTrace();
+           }
+           catch (InterruptedException e) {
+               e.printStackTrace();
            }
        }
    }
@@ -39,14 +40,12 @@ public class Messager{
 
    static Message readMessage (Socket soc) {
        try {
-           ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
-           soc.setSoTimeout(0);
-           Message mes = (Message) inpMes.readObject();
-           soc.setSoTimeout(1);
-           return mes;
-       }catch(SocketTimeoutException x){
+           return InOutMessage.getMessage(soc);
+       }
+       catch(SocketTimeoutException x){
            return null;
-       } catch (IOException x) {
+       }
+       catch (IOException x) {
            if (x.getMessage().equals("Socket is closed")) {
                x.printStackTrace();
                storage.delConnection(storage.GetUser(soc));
@@ -55,7 +54,8 @@ public class Messager{
                storage.delConnection(storage.GetUser(soc));
            } else x.printStackTrace();
            return null;
-       }catch(ClassNotFoundException e){
+       }
+       catch(ClassNotFoundException e){
            e.printStackTrace();
            return null;
        }

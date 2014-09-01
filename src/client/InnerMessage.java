@@ -1,10 +1,12 @@
 package client;
 
+import common.InOutMessage;
 import common.Message;
 import common.PrintOut;
 
-import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /**
@@ -20,16 +22,22 @@ public class InnerMessage implements Runnable{
     }
 
     public void run(){
-        try{
-            while (true){
-                ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
-                Message message = (Message) in.readObject();
-                ClientLog.add(message);
-                PrintOut.printMessageClient(ClientLog);
+        while (true){
+            try {
+                Message mes = InOutMessage.getMessage(soc);
+               // ClientLog.add(mes);
+               // PrintOut.printMessageClient(ClientLog);
+                PrintOut.printMessage(mes);
             }
-        }
-        catch(Exception x){
-            x.printStackTrace();
+            catch(SocketTimeoutException x){
+                continue;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

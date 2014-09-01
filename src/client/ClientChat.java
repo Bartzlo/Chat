@@ -14,6 +14,7 @@ public class ClientChat {
         try{
             Socket soc = new Socket("127.0.0.1", 6666);
             System.out.println("Client is ready");
+            soc.setSoTimeout(1);
 
 
             // Запускаем поток для према сообщенийи
