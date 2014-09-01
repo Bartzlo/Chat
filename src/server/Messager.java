@@ -22,6 +22,7 @@ public class Messager{
            try {
                ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
                outMes.writeObject(message);
+               outMes.flush();
            } catch (IOException x){
                if (x.getMessage().equals("Connection reset")){
                    storage.delConnection(user);
@@ -39,12 +40,16 @@ public class Messager{
        try {
            ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
            Message mes = (Message) inpMes.readObject();
-           System.out.println("Принято " + mes.getMessage());
+           System.out.println(mes.getMessage());
            return mes;
-       } catch(SocketTimeoutException x){
+       }catch(SocketTimeoutException x){
            return null;
        } catch (IOException x) {
-           if (x.getMessage().equals("Connection reset")) {
+           if (x.getMessage().equals("Socket is closed")) {
+               x.printStackTrace();
+               storage.delConnection(storage.GetUser(soc));
+               return null;
+           }if (x.getMessage().equals("Connection reset")) {
                storage.delConnection(storage.GetUser(soc));
            } else x.printStackTrace();
            return null;

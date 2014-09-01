@@ -16,9 +16,6 @@ public class ClientChat {
             System.out.println("Client is ready");
 
 
-
-
-
             // Запускаем поток для према сообщенийи
             new Thread(new InnerMessage(soc)).start();
 

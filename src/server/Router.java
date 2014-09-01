@@ -5,6 +5,7 @@ import common.Message;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import static server.ServerChat.storage;
@@ -30,6 +31,8 @@ public class Router implements Runnable{
                     Socket soc = userAndCon.getValue().getUserSoc();
                     Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
                     if (mes == null) continue;
+                    mes.setDate(new Date());
+                    mes.setUserName(user.getName());
                     new Thread(new DecodeReader(mes)).start(); // Запускаем поток обработки сообщений
             }
         }

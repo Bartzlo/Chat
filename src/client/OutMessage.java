@@ -2,6 +2,7 @@ package client;
 
 import common.Message;
 
+import java.io.DataOutputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -23,10 +24,11 @@ public class OutMessage extends Thread {
         try{
             while (true) {
                 message = new Message(null, UserMesSc.nextLine(), null);
+               // DataOutputStream out = new DataOutputStream(soc.getOutputStream());
+               // out.writeUTF(UserMesSc.nextLine());
                 ObjectOutputStream outStream = new ObjectOutputStream(soc.getOutputStream());
                 outStream.writeObject(message);
                 outStream.flush();
-                outStream.close();
             }
         }
         catch(Exception x){

@@ -17,6 +17,18 @@ public class Message implements Serializable {
         this.date = date;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getUserName (){
         return userName;
     }
