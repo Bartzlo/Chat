@@ -3,6 +3,7 @@ package client;
 import common.Message;
 
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.Scanner;
 
 /**
@@ -12,18 +13,20 @@ public class OutMessage extends Thread {
 
     Scanner UserMesSc = new Scanner(System.in);
     Message message;
-    ObjectOutputStream outStream;
+    Socket soc;
 
-    public OutMessage(ObjectOutputStream out){
-        outStream = out;
+    public OutMessage(Socket soc){
+        this.soc = soc;
     }
 
     public void run(){
         try{
             while (true) {
                 message = new Message(null, UserMesSc.nextLine(), null);
+                ObjectOutputStream outStream = new ObjectOutputStream(soc.getOutputStream());
                 outStream.writeObject(message);
                 outStream.flush();
+                outStream.close();
             }
         }
         catch(Exception x){

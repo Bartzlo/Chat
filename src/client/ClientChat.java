@@ -1,5 +1,7 @@
 package client;
 
+import common.Message;
+
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
@@ -11,16 +13,18 @@ public class ClientChat {
 
         try{
             Socket soc = new Socket("127.0.0.1", 6666);
-            ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
             System.out.println("Client is ready");
 
-            // Запускаем поток для приема сообщений
-            new Thread(new InnerMessage(in)).start();
+
+
+
+
+            // Запускаем поток для према сообщенийи
+            new Thread(new InnerMessage(soc)).start();
 
             // Запускаем поток для отправки сообщений
-            new Thread(new OutMessage(out)).start();
-        }
+            new Thread(new OutMessage(soc)).start();
+       }
         catch(Exception x){
             x.printStackTrace();
         }

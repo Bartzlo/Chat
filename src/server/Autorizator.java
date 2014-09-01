@@ -20,10 +20,9 @@ public class Autorizator implements Runnable {
 
     public void run(){
 
-        User unResistUser = new User("Urer " + storage.getNumberUsersConnect()+1);
+        User unResistUser = new User("Urer_" + (storage.getNumberUsersConnect()+1));
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
         storage.addConnection(unResistUser, unResistUserCon);
-
 
         // Пока же без регистрации
 

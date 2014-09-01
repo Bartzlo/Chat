@@ -1,11 +1,12 @@
 package common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Bart on 29.08.2014.
  */
-public class Message {
+public class Message implements Serializable {
     private String userName;
     private String message;
     private Date date;

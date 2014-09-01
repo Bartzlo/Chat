@@ -2,10 +2,13 @@ package server;
 
 import java.net.Socket;
 import java.nio.channels.SocketChannel;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static server.ServerChat.storage;
 
 /**
  * Created by as2 on 28.08.2014.
@@ -43,7 +46,8 @@ public class Storage {
     }
 
     public static Storage getInstance(){
-        fillUserInfo(); //заполняем массив
+        //fillUserInfo(); //заполняем массив
+        //пока отключил, вылетает искльчение NullPointerException (Storage.java:59)
 
         return instance;
     }
@@ -95,12 +99,13 @@ public class Storage {
 
         if (!isThere){
             userAndCon.put(user, userConnect);
+            System.out.println("Connect: " + user.getName() + " | " + userConnect.getUserSoc().toString() + " | " + new Date().toString());
         }
     }
 
     public void delConnection (User user){
+        System.out.println("Disconnect: " + user.getName() + " | " + storage.GetUserConnect(user).getUserSoc().toString() + " | " + new Date().toString());
         userAndCon.remove(user);
-
     }
 
     public User GetUser(Socket soc){
@@ -137,10 +142,21 @@ public class Storage {
         return null;
     }
 
-//    public int getNumberUsersConnect (){    // Количество подключений
-//        int n=5;
-//        return n;
-//    }
+    public UserConnect GetUserConnect(User user){
+        //return new Socket();
+        for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getKey().getName().equals(user.getName())){
+                return ob1.getValue();
+            }
+
+        }
+        return null;
+    }
+
+    public int getNumberUsersConnect (){    // Количество подключений
+        int n=userAndCon.size();
+        return n;
+    }
 
     public Iterator getIterator (){
         Iterator<Map.Entry<User, UserConnect>> it = userAndCon.entrySet().iterator();

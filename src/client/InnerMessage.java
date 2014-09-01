@@ -4,22 +4,24 @@ import common.Message;
 import common.PrintOut;
 
 import java.io.ObjectInputStream;
+import java.net.Socket;
 
 /**
  * Created by Bart on 25.08.2014.
  */
 public class InnerMessage implements Runnable{
 
-    ObjectInputStream inStream;
+    Socket soc;
 
-    public InnerMessage(ObjectInputStream in){
-        inStream = in;
+    public InnerMessage(Socket soc){
+        this.soc = soc;
     }
 
     public void run(){
         try{
             while (true){
-                Message message = (Message) inStream.readObject();
+                ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
+                Message message = (Message) in.readObject();
                 PrintOut.printMessasge(message);
             }
         }

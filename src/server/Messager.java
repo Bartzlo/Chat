@@ -4,6 +4,7 @@ import common.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,17 +16,16 @@ public class Messager{
    static void sendMessageAll (Message message){
        Iterator <Map.Entry<User, UserConnect>> it = storage.getIterator();
        while (it.hasNext()){
+           Map.Entry<User, UserConnect> userAndCon = it.next();
+           Socket soc = userAndCon.getValue().getUserSoc();
+           User user = userAndCon.getValue().getUser();
            try {
-               Map.Entry<User, UserConnect> userAndCon = it.next();
-               Socket soc = userAndCon.getValue().getUserSoc();
-               User user = userAndCon.getValue().getUser();
                ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
                outMes.writeObject(message);
            } catch (IOException x){
                if (x.getMessage().equals("Connection reset")){
-                   System.out.println("Disconnect" + user.getName() + new Date().toString());
                    storage.delConnection(user);
-               }
+               } else x.printStackTrace();
            }
        }
    }
@@ -35,10 +35,24 @@ public class Messager{
        outMes.writeObject(mes);
    }
 
-   static Message readMessage (Socket soc) throws IOException, ClassNotFoundException {
+   static Message readMessage (Socket soc) {
+       try {
            ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
            Message mes = (Message) inpMes.readObject();
+           System.out.println("Принято " + mes.getMessage());
            return mes;
+       } catch(SocketTimeoutException x){
+           return null;
+       } catch (IOException x) {
+           if (x.getMessage().equals("Connection reset")) {
+               storage.delConnection(storage.GetUser(soc));
+           } else x.printStackTrace();
+           return null;
+       }catch(ClassNotFoundException e){
+           e.printStackTrace();
+           return null;
+       }
+
    }
 
 
