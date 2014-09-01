@@ -39,6 +39,5 @@ public class InnerMessage implements Runnable{
                 e.printStackTrace();
             }
         }
-
     }
 }
