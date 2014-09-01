@@ -24,8 +24,6 @@ public class OutMessage extends Thread {
         try{
             while (true) {
                 message = new Message(null, UserMesSc.nextLine(), null);
-               // DataOutputStream out = new DataOutputStream(soc.getOutputStream());
-               // out.writeUTF(UserMesSc.nextLine());
                 ObjectOutputStream outStream = new ObjectOutputStream(soc.getOutputStream());
                 outStream.writeObject(message);
                 outStream.flush();

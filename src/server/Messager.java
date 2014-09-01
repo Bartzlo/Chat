@@ -43,7 +43,6 @@ public class Messager{
            soc.setSoTimeout(0);
            Message mes = (Message) inpMes.readObject();
            soc.setSoTimeout(1);
-           PrintOut.printMessasge(mes);
            return mes;
        }catch(SocketTimeoutException x){
            return null;
