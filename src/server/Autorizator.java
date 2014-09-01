@@ -15,7 +15,7 @@ public class Autorizator implements Runnable {
 
     public Autorizator (Socket soc) throws SocketException {
         this.soc = soc;
-        this.soc.setSoTimeout(500);
+        this.soc.setSoTimeout(1);
     }
 
     public void run(){

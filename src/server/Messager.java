@@ -1,6 +1,7 @@
 package server;
 
 import common.Message;
+import common.PrintOut;
 
 import java.io.*;
 import java.net.Socket;
@@ -39,8 +40,10 @@ public class Messager{
    static Message readMessage (Socket soc) {
        try {
            ObjectInputStream inpMes = new ObjectInputStream(soc.getInputStream());
+           soc.setSoTimeout(0);
            Message mes = (Message) inpMes.readObject();
-           System.out.println(mes.getMessage());
+           soc.setSoTimeout(1);
+           PrintOut.printMessasge(mes);
            return mes;
        }catch(SocketTimeoutException x){
            return null;
