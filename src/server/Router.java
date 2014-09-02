@@ -33,7 +33,7 @@ public class Router implements Runnable{
                     if (mes == null) continue;
                     mes.setDate(new Date());
                     mes.setUserName(user.getName());
-                    new Thread(new DecodeReader(mes)).start(); // Запускаем поток обработки сообщений
+                    new DecodeReader(mes); // Запускаем обработку сообщений
             }
         }
     }

@@ -18,7 +18,6 @@ public class InOutMessage {
     }
 
     static public void sendMessage (Socket soc, Message mes) throws IOException, InterruptedException {
-        Thread.sleep(10);
         ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
         outMes.writeObject(mes);
         outMes.flush();
