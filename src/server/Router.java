@@ -44,11 +44,18 @@ public class Router implements Runnable{
                     } catch(SocketTimeoutException x){
                         continue;
                     } catch (IOException x) {
-                        if (x.getMessage().equals("Socket is closed")) {
-                            storage.delConnection(storage.GetUser(soc));
-                        } if (x.getMessage().equals("Connection reset")) {
-                            storage.delConnection(storage.GetUser(soc));
-                        } else x.printStackTrace();
+                        try {
+                            if (x.getMessage().equals("Socket is closed")) {
+                                storage.delConnection(storage.GetUser(soc));
+                            }
+                            if (x.getMessage().equals("Connection reset")) {
+                                storage.delConnection(storage.GetUser(soc));
+                            } else x.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } catch(ClassNotFoundException e){
                         e.printStackTrace();
                     } catch (InterruptedException e) {

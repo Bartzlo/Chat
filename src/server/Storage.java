@@ -1,5 +1,10 @@
 package server;
 
+import common.InOutMessage;
+import common.Message;
+import common.PrintOut;
+
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
@@ -88,7 +93,7 @@ public class Storage {
         return 0;
     }
 
-    public void addConnection (User user, UserConnect userConnect){
+    public void addConnection (User user, UserConnect userConnect) throws IOException, InterruptedException {
 
         boolean isThere = false;
         for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
@@ -98,14 +103,18 @@ public class Storage {
         }
 
         if (!isThere){
+            Messager.sendMessageAll(new Message("SERVER", "Connect: " + user.getName(), new Date()));
             userAndCon.put(user, userConnect);
+            Messager.sendPrivatMessage(new Message("SERVER", "Welcome " + user.getName(), new Date()), userConnect.getUserSoc());
             System.out.println("Connect: " + user.getName() + " | " + userConnect.getUserSoc().toString() + " | " + new Date().toString());
         }
     }
 
-    public void delConnection (User user){
+    public void delConnection (User user) throws IOException, InterruptedException {
+        String usr = user.getName();
         System.out.println("Disconnect: " + user.getName() + " | " + storage.GetUserConnect(user).getUserSoc().toString() + " | " + new Date().toString());
         userAndCon.remove(user);
+        Messager.sendMessageAll(new Message("SERVER", "Disconnect: " + usr, new Date()));
     }
 
     public User GetUser(Socket soc){
