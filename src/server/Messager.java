@@ -38,29 +38,8 @@ public class Messager{
        outMes.writeObject(mes);
    }
 
-   static Message readMessage (Socket soc) {
-       try {
-           return InOutMessage.getMessage(soc);
-       }
-       catch(SocketTimeoutException x){
-           return null;
-       }
-       catch (IOException x) {
-           if (x.getMessage().equals("Socket is closed")) {
-               x.printStackTrace();
-               storage.delConnection(storage.GetUser(soc));
-               return null;
-           }if (x.getMessage().equals("Connection reset")) {
-               storage.delConnection(storage.GetUser(soc));
-           } else x.printStackTrace();
-           return null;
-       }
-       catch(ClassNotFoundException e){
-           e.printStackTrace();
-           return null;
-       }
-
+   static Message readMessage (Socket soc) throws IOException, ClassNotFoundException {
+       System.out.println("--------3");
+       return InOutMessage.getMessage(soc);
    }
-
-
 }

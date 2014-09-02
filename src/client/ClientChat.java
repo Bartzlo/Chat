@@ -22,7 +22,7 @@ public class ClientChat {
 
             // Запускаем поток для отправки сообщений
             new Thread(new OutMessage(soc)).start();
-       }
+        }
         catch(Exception x){
             x.printStackTrace();
         }
