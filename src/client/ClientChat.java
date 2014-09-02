@@ -9,22 +9,18 @@ import java.util.Scanner;
 
 public class ClientChat {
 
+    static public Socket soc = null;
+
     public static void main(String[] args) {
 
-        try{
-            Socket soc = new Socket("127.0.0.1", 6666);
-            System.out.println("Client is ready");
-            soc.setSoTimeout(1);
+        // Запускаем поиск сервера
+        Connect.run();
 
+        // Запускаем поток для према сообщенийи
+        new Thread(new InnerMessage()).start();
 
-            // Запускаем поток для према сообщенийи
-            new Thread(new InnerMessage(soc)).start();
-
-            // Запускаем поток для отправки сообщений
-            new Thread(new OutMessage(soc)).start();
-        }
-        catch(Exception x){
-            x.printStackTrace();
-        }
+        // Запускаем поток для отправки сообщений
+        new Thread(new OutMessage()).start();
     }
 }
+

@@ -51,6 +51,8 @@ public class Router implements Runnable{
                         } else x.printStackTrace();
                     } catch(ClassNotFoundException e){
                         e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
