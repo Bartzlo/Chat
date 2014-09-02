@@ -39,7 +39,6 @@ public class Messager{
    }
 
    static Message readMessage (Socket soc) throws IOException, ClassNotFoundException {
-       System.out.println("--------3");
        return InOutMessage.getMessage(soc);
    }
 }
