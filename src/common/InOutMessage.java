@@ -18,8 +18,10 @@ public class InOutMessage {
     }
 
     static public void sendMessage (Socket soc, Message mes) throws IOException, InterruptedException {
-        ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
-        outMes.writeObject(mes);
-        outMes.flush();
+        synchronized (soc) {
+            ObjectOutputStream outMes = new ObjectOutputStream(soc.getOutputStream());
+            outMes.writeObject(mes);
+            outMes.flush();
+        }
     }
 }
