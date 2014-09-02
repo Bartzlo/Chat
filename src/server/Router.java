@@ -15,26 +15,53 @@ public class Router implements Runnable{
 
     public void run(){
 
-        while (true) {
-            // Если нет подключений к серверу, ждем 1 секунду
-            if (storage.getNumberUsersConnect() < 1) try {
-                Thread.sleep(1000);
-            } catch (InterruptedException x) {
-            }
+        Socket soc = null;
 
-            // Получаем итератор
-            Iterator <Map.Entry<User, UserConnect>> it = storage.getIterator();
+            while (true) {
 
-            while (it.hasNext()){
-                    Map.Entry <User, UserConnect> userAndCon = it.next();
-                    User user = userAndCon.getKey();
-                    Socket soc = userAndCon.getValue().getUserSoc();
-                    Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
-                    if (mes == null) continue;
-                    mes.setDate(new Date());
-                    mes.setUserName(user.getName());
-                    new Thread(new DecodeReader(mes)).start(); // Запускаем поток обработки сообщений
+                // Если нет подключений к серверу, ждем 1 секунду
+                if (storage.getNumberUsersConnect() < 1) try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+
+                }
+
+                // Получаем итератор
+                Iterator<Map.Entry<User, UserConnect>> it = storage.getIterator();
+
+                // Цикл по все подключенным пользователям
+                while (it.hasNext()) {
+                    try {
+                        Map.Entry<User, UserConnect> userAndCon = it.next();
+                        User user = userAndCon.getKey();
+                        soc = userAndCon.getValue().getUserSoc();
+                        Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
+                        if (mes == null) continue;
+                        mes.setDate(new Date());
+                        mes.setUserName(user.getName());
+                        new DecodeReader(mes); // Запускаем обработку сообщений
+                    } catch(SocketTimeoutException x){
+                        continue;
+                    } catch (IOException x) {
+                        try {
+                            if (x.getMessage().equals("Socket is closed")) {
+                                storage.delConnection(storage.GetUser(soc));
+                            }
+                            if (x.getMessage().equals("Connection reset")) {
+                                storage.delConnection(storage.GetUser(soc));
+                            } else x.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch(ClassNotFoundException e){
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
     }
 }

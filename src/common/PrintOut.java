@@ -20,12 +20,13 @@ public class PrintOut {
 
     public static void printMessageClient(ArrayList<Message> array) throws IOException{
 
-        System.out.println("\n\n\n\n\n\n\n\n ============================\n ============================\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ============================\n ============================\n");
         for (Message mes : array){
         String name = mes.getUserName();
         String mesStr = mes.getMessage();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
+        if (name == null) name = "";
+        if (mesStr == null) mesStr = "";
 
         System.out.println("(" + dateFormat.format(mes.getDate()) + ") " + name + ": " + mesStr);}
         System.out.println("___________________________________");

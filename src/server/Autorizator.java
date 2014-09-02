@@ -1,6 +1,8 @@
 package server;
 
 import common.Message;
+
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Random;
@@ -25,7 +27,13 @@ public class Autorizator implements Runnable {
 
         User unResistUser = new User("Guest_" + rn.nextInt());
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
-        storage.addConnection(unResistUser, unResistUserCon);
+        try {
+            storage.addConnection(unResistUser, unResistUserCon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Пока же без регистрации
 
