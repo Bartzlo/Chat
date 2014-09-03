@@ -2,6 +2,7 @@ package server;
 
 import common.Message;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -12,10 +13,10 @@ import static server.ServerChat.storage;
 
 // Принимаем сообщения
 public class Router implements Runnable{
-
     public void run(){
-
         Socket soc = null;
+        String userName = null;
+        User user = null;
 
             while (true) {
 
@@ -24,7 +25,6 @@ public class Router implements Runnable{
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-
                 }
 
                 // Получаем итератор
@@ -34,31 +34,31 @@ public class Router implements Runnable{
                 while (it.hasNext()) {
                     try {
                         Map.Entry<User, UserConnect> userAndCon = it.next();
-                        User user = userAndCon.getKey();
+
+                        user = userAndCon.getKey();
+                        userName = user.getName();
                         soc = userAndCon.getValue().getUserSoc();
-                        Message mes = Messager.readMessage(soc); // Ждем сообщения в этом же потоке
+                        Message mes = Messager.readMessage(soc);
+
                         if (mes == null) continue;
+
                         mes.setDate(new Date());
                         mes.setUserName(user.getName());
                         new DecodeReader(mes); // Запускаем обработку сообщений
+
                     } catch(SocketTimeoutException x){
                         continue;
                     } catch (IOException x) {
                         try {
-                            if (x.getMessage().equals("Socket is closed")) {
+                            if (x.getMessage().equals("Socket is closed") || x.getMessage().equals("Connection reset")) {
                                 storage.delConnection(storage.GetUser(soc));
-                            }
-                            if (x.getMessage().equals("Connection reset")) {
-                                storage.delConnection(storage.GetUser(soc));
+                                System.out.println("Disconnect: " + userName + " | " + soc.toString() + " | " + new Date().toString());
+                                Messager.sendMessageAll(new Message("SERVER", "Disconnect: " + userName, new Date()));
                             } else x.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    } catch(ClassNotFoundException e){
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch(Exception e){
                         e.printStackTrace();
                     }
                 }

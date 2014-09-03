@@ -5,6 +5,7 @@ import common.Message;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Date;
 import java.util.Random;
 
 import static server.ServerChat.storage;
@@ -28,6 +29,9 @@ public class Autorizator implements Runnable {
         User unResistUser = new User("Guest_" + rn.nextInt());
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
         try {
+            Messager.sendMessageAll(new Message("SERVER", "Connect: " + unResistUser.getName(), new Date()));
+            Messager.sendPrivatMessage(new Message("SERVER", "Welcome " + unResistUser.getName(), new Date()), soc);
+            System.out.println("Connect: " + unResistUser.getName() + " | " + soc.toString() + " | " + new Date().toString());
             storage.addConnection(unResistUser, unResistUserCon);
         } catch (IOException e) {
             e.printStackTrace();
