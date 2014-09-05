@@ -6,6 +6,7 @@ import common.Message;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import static server.ServerChat.storage;
@@ -22,6 +23,16 @@ public class Messager{
            InOutMessage.sendMessage(soc, message);
        }
    }
+
+    static void sendLastLog (User user) throws IOException, InterruptedException {
+        ArrayList<Message> messages = Log.getLastLog();
+        Iterator <Message> it = messages.iterator();
+        Socket soc = storage.GetUserConnect(user).getUserSoc();
+        while (it.hasNext()){
+            InOutMessage.sendMessage(soc, it.next());
+        }
+    }
+
 
    static void sendPrivatMessage (Message mes, Socket soc) throws IOException, InterruptedException {
        InOutMessage.sendMessage(soc, mes);
