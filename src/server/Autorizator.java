@@ -30,9 +30,10 @@ public class Autorizator implements Runnable {
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
         try {
             Messager.sendMessageAll(new Message("SERVER", "Connect: " + unResistUser.getName(), new Date()));
-            Messager.sendPrivatMessage(new Message("SERVER", "Welcome " + unResistUser.getName(), new Date()), soc);
             System.out.println("Connect: " + unResistUser.getName() + " | " + soc.toString() + " | " + new Date().toString());
             storage.addConnection(unResistUser, unResistUserCon);
+            Messager.sendLastLog(storage.GetUser(unResistUser.getName()));
+            Messager.sendPrivatMessage(new Message("SERVER", "Welcome " + unResistUser.getName(), new Date()), soc);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
