@@ -83,6 +83,17 @@ public class Storage {
         return -1;
     }
 
+    public int setStage(User user, String stage){
+        for (Map.Entry<User, Integer> ob1 : Users.entrySet()) {
+            if (ob1.getKey().equals(user)){
+                ob1.getKey().setStage(stage);
+                return 0;
+            }
+        }
+        //Users.put(user, null);
+        return -1;
+    }
+
     public int RegistrationUser(User user, String name, String pass){ //пароль пока не используем
         for (Map.Entry<User, Integer> ob1 : Users.entrySet()) {
             if (ob1.getKey().getName().equals(name)){
@@ -121,6 +132,16 @@ public class Storage {
     public User GetUser(String name){
         //return new User();
         for (Map.Entry<User, UserConnect> ob1 : userAndCon.entrySet()) {
+            if (ob1.getKey().getName().equals(name)){
+                return ob1.getKey();
+            }
+        }
+        return null;
+    }
+
+    public User GetRegisteredUser(String name){
+        //return new User();
+        for (Map.Entry<User, Integer> ob1 : Users.entrySet()) {
             if (ob1.getKey().getName().equals(name)){
                 return ob1.getKey();
             }

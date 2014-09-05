@@ -9,7 +9,16 @@ import static server.ServerChat.*;
  */
 public class User {
     private String name;
+    private String stage;
     private boolean isUserLogIn = true;
+
+    public String getStage() {
+        return stage;
+    }
+
+    public void setStage(String stage) {
+        this.stage = stage;
+    }
 
     public User(){}
 
