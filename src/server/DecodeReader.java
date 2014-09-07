@@ -109,6 +109,7 @@ public class DecodeReader {
 //
 //        }
 
+        Log.wrireUserLog(message);
         PrintOut.printMessage(message);
         Messager.sendMessageAll(message);
     }
