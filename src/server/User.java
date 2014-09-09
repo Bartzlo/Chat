@@ -9,7 +9,7 @@ import static server.ServerChat.*;
  */
 public class User {
     private String name;
-    private String stage;
+    private String stage = "Guest";
     private boolean isUserLogIn = true;
 
     public String getStage() {
