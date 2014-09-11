@@ -6,10 +6,15 @@ import static server.ServerChat.*;
 
 // Поиск новых подключений
 public class Connect implements Runnable{
+    private int PORT;
+
+    public Connect(int PORT) {
+        this.PORT = PORT;
+    }
 
     public void run(){
         try {
-            ServerSocket ss = new ServerSocket(6666);
+            ServerSocket ss = new ServerSocket(PORT);
             System.out.println("Server is ready");
 
             // цикл поиска подключений

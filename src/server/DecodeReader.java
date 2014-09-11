@@ -191,10 +191,7 @@ public class DecodeReader {
         this.run();
     }
 
-    //********** Код для парсинга сообщения **********************************
-    //********** на выходе чистое сообщение и строка команды *****************
-    // ********* если команды нет то String com = null ***********************
-    //********** можешь потестить в отдельном файле **************************
+
     private String getCommand (){
         String com=null, arg=null;
         String mes = message.getMessage();             // mes это сообщение из объекта Message
@@ -213,50 +210,7 @@ public class DecodeReader {
     }
 
     private void run() throws IOException, InterruptedException {
-        // Сдесь будет определятся тип сообщения, команда или просто сообщение
-        // Пока в любом случае отправляем всем
 
-        // какие условия надо учитывать: этап пользователя, сообщение которое он отправил (совпадение с определенным кодом)
-        // этапы пользователей: гость, пароль, вводпароля (при создании нового пользователя), поддтверждение пароля,
-        // активен (при создании нового пользователя), админ, забанен =) хехехе.
-        // команды: //create создание нового пользователя (этапы любые кроме забанен)
-
-        // команды: //login перейти к вводу существующего логина (этапы гость)
-        // команды: //repass смена пароля (этапы активен, админ)
-
-
-
-
-//        Storage storage = Storage.getInstance();
-//
-//        User user = storage.getUser(message.getUserName());
-//
-//        if (user != null){
-//            Pair<String, String> gg = new Pair<String, String>(user.getStage(),message.getMessage());
-//
-//            DecodeR decoder = Chosing.get(gg);
-//
-//            if (decoder == null){
-//                 gg = new Pair<String, String>(user.getStage(),null);
-//                decoder = Chosing.get(gg);
-//                if (decoder == null)
-//                {
-//                    System.out.println("DecodeReader: Combination doesn't exist");
-//                }
-//                else {
-//                    decoder.decode(message);
-//                    //срабатывает если в строке команды нет, null обозначение смысловое
-//                }
-//
-//            }else {
-//                decoder.decode(message);
-//                //срабатывает если в строке какая то команда
-//            }
-//
-//
-//        }
-
-        // с парсером для работы чудо мапы нужно только это
         User user = storage.getUser(message.getUserName());
         Pair<String, String> gg = new Pair<String, String>(user.getStage(),getCommand());
         DecodeR decoder = Chosing.get(gg);

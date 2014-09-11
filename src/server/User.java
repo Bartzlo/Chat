@@ -10,7 +10,6 @@ import static server.ServerChat.*;
 public class User {
     private String name;
     private String stage = "Guest";
-    private boolean isUserLogIn = true;
 
     public String getStage() {
         return stage;
@@ -35,9 +34,6 @@ public class User {
         this.name = name;
     }
 
-    public boolean checkUser(){
-        return isUserLogIn;
-    }
 
 
 }

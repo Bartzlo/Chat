@@ -2,6 +2,9 @@ package client;
 
 import java.io.IOException;
 import java.net.Socket;
+
+import static client.ClientChat.IP_ADRES;
+import static client.ClientChat.PORT;
 import static client.ClientChat.soc;
 
 /**
@@ -13,7 +16,7 @@ public class Connect {
         while (true) {
             try {
                 Thread.sleep(1000);
-                soc = new Socket("192.168.35.50", 6666);
+                soc = new Socket(IP_ADRES, PORT);
                 soc.setSoTimeout(1);
                 System.out.println("Server is found!");
                 break;
