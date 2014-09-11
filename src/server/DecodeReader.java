@@ -25,68 +25,168 @@ public class DecodeReader {
 
     private static HashMap<Pair<String, String>, DecodeR> Chosing = new HashMap<Pair<String, String>, DecodeR>();
 
-    // У нас же уже есть конструктор этого класса (перенес)
-    // Предлагаю это закинуть в сторедж например, чтобы не генерить паму постоянно при вызове декодера
+    protected  class Registration1 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Message mes = new Message("System","Enter new login",new Date());
+            Socket soc = storage.getUserSoc(message.getUserName());
+            Messager.sendPrivatMessage(mes, soc);
+            storage.getUser(message.getUserName()).setStage("RegLogin");
+        }
+    }
 
-    DecodeReader(){
-        //первый идёт этап а потом команда
-        Chosing.put(new Pair("Guest",null ), new Decoder1());
-        Chosing.put(new Pair("Pass",null ), new Decoder2());
-        Chosing.put(new Pair("Active",null ), new Decoder3()); //null означает что не совпадает ни с одной командой
-        Chosing.put(new Pair("Active","\\\\logout" ), new Decoder3());
-        Chosing.put(new Pair("Guest","/test"), new Decoder4());
+    protected  class Registration2 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+
+            Socket soc = storage.getUserSoc(message.getUserName());
+
+            if (!Log.checUserName(message.getMessage())){
+                Message mes2 = new Message("System","This name is already taken. Enter new login",new Date());
+                Messager.sendPrivatMessage(mes2, soc);
+                return;
+            }
+
+            if ((storage.getUser(message.getMessage()) != null) &
+               !(message.getUserName().equals(message.getMessage()))){
+                    Message mes2 = new Message("System","This user is already chatting.",new Date());
+                    Messager.sendPrivatMessage(mes2, soc);
+                    return;
+            }
+
+            Message mes1 = new Message("System","Enter new password",new Date());
+            Messager.sendPrivatMessage(mes1, soc);
+            storage.getUser(message.getUserName()).setStage("RegPass");
+            storage.getUser(message.getUserName()).setName(message.getMessage());
+        }
+    }
+
+    protected  class Registration3 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Message mes = new Message("System","Are you registered!",new Date());
+            Socket soc = storage.getUserSoc(message.getUserName());
+            storage.getUser(message.getUserName()).setStage("Registered");
+            Log.addUserReg(message.getUserName(),message.getMessage());
+            Messager.sendLastLog(storage.getUser(message.getUserName()));
+            Messager.sendPrivatMessage(mes, soc);
+            Messager.sendMessageAll(new Message("System", "Connect: " + message.getUserName(), new Date()));
+        }
+    }
+
+
+
+    protected  class Login1 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Message mes = new Message("System","Enter you login",new Date());
+            Socket soc = storage.getUserSoc(message.getUserName());
+            Messager.sendPrivatMessage(mes, soc);
+            storage.getUser(message.getUserName()).setStage("Login");
+        }
+    }
+
+    protected  class Login2 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Socket soc = storage.getUserSoc(message.getUserName());
+
+            if (Log.checUserName(message.getMessage())){
+                Message mes2 = new Message("System","User not found. For registration, enter: /reg",new Date());
+                Messager.sendPrivatMessage(mes2, soc);
+                return;
+            }
+
+            if ((storage.getUser(message.getMessage()) != null) &
+               !(message.getUserName().equals(message.getMessage()))){
+                    Message mes2 = new Message("System","This user is already chatting. For registration, enter: /reg",new Date());
+                    Messager.sendPrivatMessage(mes2, soc);
+                    return;
+            }
+
+            Message mes1 = new Message("System","Enter you password",new Date());
+            Messager.sendPrivatMessage(mes1, soc);
+            storage.getUser(message.getUserName()).setStage("LoginPass");
+            storage.getUser(message.getUserName()).setName(message.getMessage());
+        }
+    }
+
+    protected  class Login3 implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+
+            Socket soc = storage.getUserSoc(message.getUserName());
+
+            if (Log.checUserPass(message.getUserName(), message.getMessage())){
+                Messager.sendLastLog(storage.getUser(message.getUserName()));
+                storage.getUser(message.getUserName()).setStage("Registered");
+                Messager.sendMessageAll(new Message("System", "Connect: " + message.getUserName(), new Date()));
+            }else {
+                Message mes2 = new Message("System","Wrong password. For registration, enter: /reg",new Date());
+                Messager.sendPrivatMessage(mes2, soc);
+            }
+
+
+        }
+    }
+
+
+    protected  class Registered implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Log.wrireUserLog(message);
+            PrintOut.printMessage(message);
+            Messager.sendMessageAll(message);
+        }
+    }
+
+    protected  class LogOut implements DecodeR{
+        @Override
+        public void decode(Message message) throws IOException, InterruptedException {
+            Socket soc = storage.getUserSoc(message.getUserName());
+            Message mes = new Message("System", "You have been signed out of chat", new Date());
+            Messager.sendPrivatMessage(mes,soc);
+            storage.getUser(message.getUserName()).setStage("Guest");
+            Messager.sendMessageAll(new Message("System", "Disconnect: " + message.getUserName(), new Date()));
+        }
     }
 
 
     protected  class Decoder1 implements DecodeR{
         @Override
         public void decode(Message message) throws IOException, InterruptedException{
-            Storage storage = Storage.getInstance();
-            User user = storage.GetUser(message.getMessage());
-            if (user != null){
-                storage.setStage(user,"Pass");
-
-            }
-            else{
-                Messager.sendPrivatMessage(new Message("System","That user doesn't exist, try again"
-                        , new Date()),  storage.GetUserConnect(message.getUserName()).getUserSoc() );
-
-            }
-
-
+            Message mes = new Message("System", "You do not Authorizing. " +
+                    "For registration enter /reg. For for authorization enter /login", new Date());
+            Socket soc = storage.getUserSoc(message.getUserName());
+            Messager.sendPrivatMessage(mes,soc);
         }
     }
 
-    protected  class Decoder2 implements DecodeR{
-        @Override
-        public void decode(Message message) {
 
-        }
-    }
-
-    protected  class Decoder3 implements DecodeR{
-        @Override
-        public void decode(Message message) {
-
-        }
-    }
-
-    protected  class Decoder4 implements DecodeR{
-        @Override
-        public void decode(Message message) throws IOException, InterruptedException {
-            String mes = "You send test command. Argumet: "+message.getMessage();
-            Date date = new Date();
-            Socket soc = storage.GetUserConnect(storage.GetUser(message.getUserName())).getUserSoc();
-            Messager.sendPrivatMessage(new Message("System",mes,date),soc);
-        }
-    }
 
     public DecodeReader(Message message) throws IOException, InterruptedException {
         Chosing.put(new Pair("Guest",null ), new Decoder1());
-        Chosing.put(new Pair("Pass",null ), new Decoder2());
-        Chosing.put(new Pair("Active",null ), new Decoder3()); //null означает что не совпадает ни с одной командой
-        Chosing.put(new Pair("Active","\\\\logout" ), new Decoder3());
-        Chosing.put(new Pair("Guest","/test"), new Decoder4());
+
+        Chosing.put(new Pair("Guest","/reg" ), new Registration1());
+        Chosing.put(new Pair("Login","/reg" ), new Registration1());
+        Chosing.put(new Pair("LoginPass","/reg" ), new Registration1());
+        Chosing.put(new Pair("RegLogin","/reg" ), new Registration1());
+        Chosing.put(new Pair("RegPass","/reg" ), new Registration1());
+        Chosing.put(new Pair("RegLogin",null ), new Registration2());
+        Chosing.put(new Pair("RegPass",null ), new Registration3());
+
+        Chosing.put(new Pair("Guest","/login" ), new Login1());
+        Chosing.put(new Pair("RegLogin","/login" ), new Login1());
+        Chosing.put(new Pair("RegPass","/login" ), new Login1());
+        Chosing.put(new Pair("Login","/login" ), new Login1());
+        Chosing.put(new Pair("LoginPass","/login" ), new Login1());
+        Chosing.put(new Pair("Login",null ), new Login2());
+        Chosing.put(new Pair("LoginPass",null ), new Login3());
+
+        Chosing.put(new Pair("Registered",null ), new Registered());
+        Chosing.put(new Pair("Registered","/exit" ), new LogOut());
+
+
         this.message = message;
         this.run();
     }
@@ -129,7 +229,7 @@ public class DecodeReader {
 
 //        Storage storage = Storage.getInstance();
 //
-//        User user = storage.GetUser(message.getUserName());
+//        User user = storage.getUser(message.getUserName());
 //
 //        if (user != null){
 //            Pair<String, String> gg = new Pair<String, String>(user.getStage(),message.getMessage());
@@ -157,13 +257,16 @@ public class DecodeReader {
 //        }
 
         // с парсером для работы чудо мапы нужно только это
-        User user = storage.GetUser(message.getUserName());
+        User user = storage.getUser(message.getUserName());
         Pair<String, String> gg = new Pair<String, String>(user.getStage(),getCommand());
         DecodeR decoder = Chosing.get(gg);
+        if (decoder == null) {
+            Socket soc = storage.getUserSoc(user);
+            Message mes1 = new Message("System","Invalid input!",new Date());
+            Messager.sendPrivatMessage(mes1, soc);
+            return;
+        }
         decoder.decode(message);
-
-        Log.wrireUserLog(message);
         PrintOut.printMessage(message);
-        Messager.sendMessageAll(message);
     }
 }

@@ -5,7 +5,6 @@ import common.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,14 +19,16 @@ public class Messager{
            Map.Entry<User, UserConnect> userAndCon = it.next();
            Socket soc = userAndCon.getValue().getUserSoc();
            User user = userAndCon.getValue().getUser();
-           InOutMessage.sendMessage(soc, message);
+           if (user.getStage().equals("Registered")) {
+               InOutMessage.sendMessage(soc, message);
+           }
        }
    }
 
     static void sendLastLog (User user) throws IOException, InterruptedException {
         ArrayList<Message> messages = Log.getLastLog();
         Iterator <Message> it = messages.iterator();
-        Socket soc = storage.GetUserConnect(user).getUserSoc();
+        Socket soc = storage.getUserConnect(user).getUserSoc();
         while (it.hasNext()){
             InOutMessage.sendMessage(soc, it.next());
         }

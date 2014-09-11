@@ -2,7 +2,6 @@ package server;
 
 import common.Message;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -51,9 +50,12 @@ public class Router implements Runnable{
                     } catch (IOException x) {
                         try {
                             if (x.getMessage().equals("Socket is closed") || x.getMessage().equals("Connection reset")) {
-                                storage.delConnection(storage.GetUser(soc));
+                                String userStage = storage.getUser(soc).getStage();
+                                storage.delConnection(storage.getUser(soc));
                                 System.out.println("Disconnect: " + userName + " | " + soc.toString() + " | " + new Date().toString());
-                                Messager.sendMessageAll(new Message("SERVER", "Disconnect: " + userName, new Date()));
+                                if (userStage.equals("Registered")) {
+                                     Messager.sendMessageAll(new Message("System", "Disconnect: " + userName, new Date()));
+                                }
                             } else x.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();

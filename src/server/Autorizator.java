@@ -29,11 +29,9 @@ public class Autorizator implements Runnable {
         User unResistUser = new User("Guest_" + rn.nextInt());
         UserConnect unResistUserCon = new UserConnect(unResistUser, soc);
         try {
-            Messager.sendMessageAll(new Message("SERVER", "Connect: " + unResistUser.getName(), new Date()));
             System.out.println("Connect: " + unResistUser.getName() + " | " + soc.toString() + " | " + new Date().toString());
             storage.addConnection(unResistUser, unResistUserCon);
-            Messager.sendLastLog(storage.GetUser(unResistUser.getName()));
-            Messager.sendPrivatMessage(new Message("SERVER", "Welcome " + unResistUser.getName(), new Date()), soc);
+            Messager.sendPrivatMessage(new Message("System", "Welcome in chat!", new Date()), soc);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

@@ -17,6 +17,7 @@ public class User {
     }
 
     public void setStage(String stage) {
+        System.out.println("Set stage " + this.getStage() + "-->" + stage);
         this.stage = stage;
     }
 

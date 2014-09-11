@@ -13,7 +13,7 @@ public class Connect {
         while (true) {
             try {
                 Thread.sleep(1000);
-                soc = new Socket("127.0.0.1", 6666);
+                soc = new Socket("192.168.35.50", 6666);
                 soc.setSoTimeout(1);
                 System.out.println("Server is found!");
                 break;
