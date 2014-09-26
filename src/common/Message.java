@@ -1,6 +1,7 @@
 package common;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -39,6 +40,17 @@ public class Message implements Serializable {
 
     public Date getDate() {
         return date;
+    }
+
+    public String printMessage(){
+        String name = this.getUserName();
+        String mesStr = this.getMessage();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        String date = dateFormat.format(this.getDate());
+        if (name == null) name = "";
+        if (mesStr == null) mesStr = "";
+        String mes = "(" + date + ") " + name + ": " + mesStr;
+        return mes;
     }
 
 }
