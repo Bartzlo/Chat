@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,7 +15,10 @@
     <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TextArea fx:id="mainArea" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+      <TextArea fx:id="mainArea" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" wrapText="true">
+         <cursor>
+            <Cursor fx:constant="NONE" />
+         </cursor></TextArea>
       <TextField fx:id="enterArea" onAction="#enterText" GridPane.rowIndex="1" />
    </children>
 </GridPane>

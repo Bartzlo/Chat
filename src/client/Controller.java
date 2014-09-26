@@ -22,8 +22,8 @@ public class Controller {
     //InnerMessage innerMessage = new InnerMessage();
 
     public void initialize(){
+        enterArea.setDisable(true);
         connect.start();
-        //innerMessage.start();
     }
 
     @FXML

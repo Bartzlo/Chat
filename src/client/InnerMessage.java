@@ -50,6 +50,7 @@ public class InnerMessage extends Service<Void>{
                                 @Override
                                 public void run() {
                                     con.mainArea.appendText("The connection to the server is lost."+"\n");
+                                    con.enterArea.setDisable(true);
                                 }
                             });
                             new Connect().start();

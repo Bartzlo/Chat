@@ -3,6 +3,7 @@ package client;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.Cursor;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -45,9 +46,10 @@ public class Connect extends Service<Boolean>{
                     public void run() {
                         System.out.println("Server is found!");
                         con.mainArea.appendText("Server is found!"+"\n");
+                        con.enterArea.setDisable(false);
+                        con.enterArea.requestFocus();
                     }
                 });
-
                 new InnerMessage().start();
                 return true;
             }
