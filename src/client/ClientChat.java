@@ -29,12 +29,12 @@ public class ClientChat extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Properties config = new Properties();
-        File configFile = new File("config.ini");
+        File configFile = new File("configClient.ini");
         if (!configFile.isFile()){
             try {
                 configFile.createNewFile();
                 FileWriter fv = new FileWriter(configFile);
-                fv.write("IP_ADRES=127.0.0.1" + "\n");
+                fv.write("IP_ADRES=127.0.0.1" + " \r\n");
                 fv.write("PORT=6666");
                 fv.close();
             } catch (IOException e) {
@@ -43,14 +43,16 @@ public class ClientChat extends Application {
         }
 
         try {
-            config.load(new FileInputStream((new File("config.ini"))));
+            config.load(new FileInputStream((new File("configClient.ini"))));
         } catch (FileNotFoundException e){
-            new File("config.ini");
+            new File("configClient.ini");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        System.out.println(config.getProperty("IP_ADRES"));
         IP_ADRES = config.getProperty("IP_ADRES");
+        System.out.println(config.getProperty("PORT"));
         PORT = Integer.valueOf(config.getProperty("PORT"));
 
 

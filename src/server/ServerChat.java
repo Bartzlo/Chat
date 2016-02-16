@@ -12,7 +12,7 @@ public class ServerChat {
     public static void main(String[] args) {
 
         Properties config = new Properties();
-        File configFile = new File("configs.ini");
+        File configFile = new File("configServer.ini");
         if (!configFile.isFile()){
             try {
                 configFile.createNewFile();
@@ -25,7 +25,7 @@ public class ServerChat {
         }
 
         try {
-            config.load(new FileInputStream((new File("configs.ini"))));
+            config.load(new FileInputStream((new File("configServer.ini"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
